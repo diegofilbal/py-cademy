@@ -5,7 +5,7 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
     get_object_or_404,
 )
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -61,6 +61,13 @@ class CourseViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class RateViewSet(viewsets.ModelViewSet):
+class RateViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
     queryset = Rate.objects.all()
     serializer_class = RateSerializer
