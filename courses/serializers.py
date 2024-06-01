@@ -21,6 +21,18 @@ class RateSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
+
+    # Nested Relationship
+    # rates = RateSerializer(many=True, read_only=True)
+
+    # Hyperlinked Related Field
+    rates = serializers.HyperlinkedRelatedField(
+        many=True, read_only=True, view_name="rate-detail"
+    )
+
+    # Primary Key Related Field
+    # rates = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
     class Meta:
         model = Course
         fields = (
@@ -29,4 +41,5 @@ class CourseSerializer(serializers.ModelSerializer):
             "url",
             "created_at",
             "active",
+            "rates",
         )
