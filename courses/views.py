@@ -5,6 +5,12 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
     get_object_or_404,
 )
+from rest_framework import viewsets, mixins
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
+
+# ------------------------- API V1 -------------------------
 
 
 class CoursesAPIView(ListCreateAPIView):
@@ -39,3 +45,29 @@ class RateAPIView(RetrieveUpdateDestroyAPIView):
                 pk=self.kwargs.get("rate_pk"),
             )
         return get_object_or_404(self.get_queryset(), pk=self.kwargs.get("pk"))
+
+
+# ------------------------- API V2 -------------------------
+
+
+class CourseViewSet(viewsets.ModelViewSet):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+
+    @action(methods=["get"], detail=True)
+    def rates(self, request, pk=None):
+        course = self.get_object()
+        serializer = RateSerializer(course.rates.all(), many=True)
+        return Response(serializer.data)
+
+
+class RateViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
+    queryset = Rate.objects.all()
+    serializer_class = RateSerializer
