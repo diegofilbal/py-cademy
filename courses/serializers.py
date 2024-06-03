@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Course, Rate
+from django.db.models import Avg
 
 
 class RateSerializer(serializers.ModelSerializer):
@@ -37,6 +38,8 @@ class CourseSerializer(serializers.ModelSerializer):
     # Primary Key Related Field
     # rates = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
+    rate_avg = serializers.SerializerMethodField()
+
     class Meta:
         model = Course
         fields = (
@@ -46,4 +49,11 @@ class CourseSerializer(serializers.ModelSerializer):
             "created_at",
             "active",
             "rates",
+            "rate_avg",
         )
+
+    def get_rate_avg(self, obj):
+        avg = obj.rates.aggregate(Avg("rate")).get("rate__avg")
+        if avg is None:
+            return 0
+        return round(avg, 1)
