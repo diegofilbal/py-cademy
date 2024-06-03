@@ -9,7 +9,7 @@ from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import permissions
-from .permissions import isSuperUser
+from .permissions import IsSuperUser
 
 
 # ------------------------- API V1 -------------------------
@@ -57,7 +57,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
 
     permission_classes = (
-        isSuperUser,
+        IsSuperUser,
         permissions.DjangoModelPermissions,
     )
 
