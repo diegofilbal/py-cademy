@@ -19,6 +19,10 @@ class RateSerializer(serializers.ModelSerializer):
             "email": {"write_only": True},
         }
 
+    def validate_rate(self, rate):
+        if rate < 0 or rate > 5:
+            raise serializers.ValidationError("Rate must be between 0 and 5.")
+
 
 class CourseSerializer(serializers.ModelSerializer):
 
