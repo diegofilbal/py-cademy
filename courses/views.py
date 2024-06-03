@@ -8,6 +8,8 @@ from rest_framework.generics import (
 from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework import permissions
+from .permissions import isSuperUser
 
 
 # ------------------------- API V1 -------------------------
@@ -53,6 +55,11 @@ class RateAPIView(RetrieveUpdateDestroyAPIView):
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+
+    permission_classes = (
+        isSuperUser,
+        permissions.DjangoModelPermissions,
+    )
 
     @action(methods=["get"], detail=True)
     def rates(self, request, pk=None):
