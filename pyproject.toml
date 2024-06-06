@@ -12,6 +12,9 @@ black = "^24.4.2"
 python-decouple = "^3.8"
 dj-database-url = "^2.2.0"
 djangorestframework = "^3.15.1"
+requests = "^2.32.3"
+jsonpath = "^0.82.2"
+pytest = "^8.2.1"
 
 
 [build-system]
